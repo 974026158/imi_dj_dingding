@@ -1,0 +1,305 @@
+.enterpriseCredit {
+  width: 100%;
+  background: #f7f7f7;
+}
+
+.enterpriseCredit .noteLogo {
+  vertical-align: middle;
+  font-size: 15px;
+}
+
+.enterpriseCredit .time {
+  height: 1.55rem;
+  background: #cb0a0f;
+  display: flex;
+  border-bottom: 1px solid #e4c6c6;
+}
+
+.enterpriseCredit .time .timeLogoDiv {
+  width: 1.3rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.enterpriseCredit .time .timeLogoDiv .timeLogo {
+  height: 0.83rem;
+  width: 0.83rem;
+}
+
+.enterpriseCredit .time .timeLogoDiv p {
+  font-size: 10px;
+  color: #fff;
+}
+
+.enterpriseCredit .time .timeLogoDiv .button {
+  height: 0.28rem;
+  width: 0.75rem;
+  background: #fec104;
+  text-align: center;
+  line-height: 0.28rem;
+  font-size: 13px;
+  color: #fff;
+  box-shadow: 0px 0px 2px 1px #d85415;
+  border-radius: 3px;
+}
+
+.enterpriseCredit .time .classHour {
+  flex: 1;
+  padding-right: 0.39rem;
+  padding-top: 0.28rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.enterpriseCredit .time .classHour .compulsoryOrelective {
+  width: 100%;
+  height: 0.19rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.enterpriseCredit .time .classHour .compulsoryOrelective span {
+  color: #feda0a;
+  font-size: 13px;
+}
+
+.enterpriseCredit .time .classHour .totalHourOralreadyHour {
+  flex: 1;
+  padding-bottom: 0.225rem;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.enterpriseCredit .time .classHour .totalHourOralreadyHour span:nth-child(1) {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.enterpriseCredit .time .classHour .totalHourOralreadyHour span:nth-child(1) h2 {
+  font-size: 44px;
+  color: #fff;
+}
+
+.enterpriseCredit .time .classHour .totalHourOralreadyHour span:nth-child(1) em {
+  font-size: 13px;
+  color: #fff;
+}
+
+.enterpriseCredit .time .classHour .totalHourOralreadyHour span:nth-child(2) {
+  display: block;
+  width: 0.02rem;
+  background: #e9c8c9;
+  border-radius: 10px;
+  height: 100%;
+}
+
+.enterpriseCredit .time .classHour .totalHourOralreadyHour span:nth-child(3) {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.enterpriseCredit .time .classHour .totalHourOralreadyHour span:nth-child(3) h2 {
+  font-size: 44px;
+  color: #fff;
+}
+
+.enterpriseCredit .time .classHour .totalHourOralreadyHour span:nth-child(3) em {
+  font-size: 13px;
+  color: #fff;
+}
+
+.enterpriseCredit .noteOrexperience {
+  height: 0.4rem;
+  background: #cb0a0f;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  font-size: 13px;
+  color: #fff;
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+  box-shadow: inset 0px -12px 10px -16px #000;
+}
+
+.enterpriseCredit .noteOrexperience .noteLogoColor {
+  color: #feda0a;
+}
+
+.enterpriseCredit .noteOrexperience span:nth-child(2) {
+  display: block;
+  width: 0.02rem;
+  background: #e9c8c9;
+  border-radius: 10px;
+  height: 0.22rem;
+}
+
+.enterpriseCredit .compulsoryDiv {
+  width: 100%;
+  height: 1.95rem;
+  background: #fff;
+  border-top: 1px solid #f2f2f2;
+  border-bottom: 1px solid #f2f2f2;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.09rem;
+}
+
+.enterpriseCredit .compulsoryDiv .compulsoryHeader {
+  height: 0.5rem;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  padding-left: 0.15rem;
+}
+
+.enterpriseCredit .compulsoryDiv .compulsoryHeader span:nth-child(1) {
+  display: block;
+  width: 0.2rem;
+  margin-right: 0.08rem;
+}
+
+.enterpriseCredit .compulsoryDiv .compulsoryHeader span:nth-child(2) {
+  font-size: 15px;
+  color: #7f7f7f;
+  line-height: 0.05rem;
+}
+
+.enterpriseCredit .compulsoryDiv .complete {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.enterpriseCredit .compulsoryDiv .complete .tabDiv {
+  height: 0.35rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid #e7e7e7;
+}
+
+.enterpriseCredit .compulsoryDiv .complete .tabDiv span {
+  width: 50%;
+  height: 100%;
+  display: block;
+  text-align: center;
+  line-height: 0.35rem;
+  color: #b8b8b8;
+  font-size: 15px;
+}
+
+.enterpriseCredit .compulsoryDiv .complete .tabDiv .active {
+  color: #c33c3d;
+  border-bottom: 2px solid #c33c3d;
+  transition: 0.2s;
+  width: 50%;
+}
+
+.enterpriseCredit .compulsoryDiv .complete .tabData {
+  flex: 1;
+}
+
+.enterpriseCredit .compulsoryDiv .complete .tabData div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  padding: 0.15rem;
+}
+
+.enterpriseCredit .compulsoryDiv .complete .tabData div:nth-child(1) {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.enterpriseCredit .compulsoryDiv .complete .tabData div:nth-child(1) span {
+  display: block;
+}
+
+.enterpriseCredit .compulsoryDiv .complete .tabData div:nth-child(1) span:nth-child(1) {
+  width: 65%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.enterpriseCredit .compulsoryDiv .complete .tabData div:nth-child(1) span:nth-child(1) p {
+  font-size: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: bold;
+}
+
+.enterpriseCredit .compulsoryDiv .complete .tabData div:nth-child(1) span:nth-child(1) span {
+  border: none;
+  width: auto;
+  height: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.enterpriseCredit .compulsoryDiv .complete .tabData div:nth-child(1) span:nth-child(1) span span {
+  height: 0.05rem;
+  width: 1.05rem;
+  background: #eaeaea;
+  border-radius: 0 20px 20px 0;
+  position: relative;
+}
+
+.enterpriseCredit .compulsoryDiv .complete .tabData div:nth-child(1) span:nth-child(1) span span span {
+  position: absolute;
+  height: 100%;
+  border-radius: 0 20px 20px 0;
+  background: #ee2400;
+  top: 0;
+  left: 0;
+}
+
+.enterpriseCredit .compulsoryDiv .complete .tabData div:nth-child(1) span:nth-child(1) span em {
+  font-size: 12px;
+  color: #ee2400;
+  padding-right: 0.5rem;
+}
+
+.enterpriseCredit .compulsoryDiv .complete .tabData div:nth-child(1) span:nth-child(2) {
+  display: block;
+  width: 1.17rem;
+  height: 0.63rem;
+  border: 1px solid #ccc;
+}
+
+.enterpriseCredit .list {
+  padding-bottom: 0.08rem;
+  display: flex;
+  justify-content: space-around;
+}
+
+.enterpriseCredit .list .listChildren {
+  flex-direction: column;
+  height: 100%;
+  text-align: center;
+}
+
+.enterpriseCredit .list .listChildren img {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+}
+
+.enterpriseCredit .list .listChildren p {
+  font-size: 13px;
+  color: #939393;
+}

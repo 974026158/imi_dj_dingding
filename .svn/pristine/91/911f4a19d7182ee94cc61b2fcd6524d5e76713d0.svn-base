@@ -1,0 +1,167 @@
+<template>
+  <div class="compulsoryDiv">
+    <header-search :placeHolder="placeHolder" @childrenEvent='childrenEvent'></header-search>
+
+    <header-navigation></header-navigation>
+    <!-- 搜索内容 -->
+    <van-loading size="24px" color="#ee2400" type="spinner" v-show="defaultFlag" style="margin-top:0.8rem">数据加载中...</van-loading>
+    <div class="search-content complete" v-show="keyword">
+      <ul class="tabData">
+        <li class="search-item tabDataChildren" v-for="item of list" :key="type==='0'?item.courseId:item.catalogId">
+          <span>
+            <span>
+              <img :src="type==='0'?coursePrefix + item.coursePathCover + suffix:catalogPrefix + item.catagory_img + suffix" alt style="width:100%;height:100%" class="commonImgStyle" />
+            </span>
+
+            <p style="margin-top:0.1rem;margin-bottom:0.1rem" class="commonText">{{type==='0'?item.courseName:item.catalogName}}</p>
+            <span class="barContainer">
+              <span class="barContainerChildren progressBar">
+                <span class="progressBarConduct" :style="{width:type==='0'?item.currentStudyTime / item.courseTotalTime * 100 + '%':item.catalogFinishiTime / item.catalogTotalTime * 100 + '%',display:barBlock,background:barColor,height:barHeight,'border-radius': '0 0.1rem 0.1rem 0'}"></span>
+              </span>
+              <em class="progressBarSize">{{type==='0'?item.currentStudyTime / item.courseTotalTime * 100 + '%':(item.catalogFinishiTime / item.catalogTotalTime * 100).toFixed(0) + '%'}}</em>
+            </span>
+          </span>
+
+        </li>
+        <no-more  v-if="noMoreFalge" v-show="!hasNoData"></no-more>
+        <!-- <div class="noMore" v-if="noMoreFalge" v-show="!hasNoData">-- 没有更多 --</div> -->
+        <li v-show="hasNoData" class="hasData">
+          没有找到匹配数据
+        </li>
+      </ul>
+    </div>
+    <div class="complete" v-show="!keyword">
+      <div class="tabData">
+        <div class="tabDataChildren" v-for="item in index===0?unfinishedCourseList:finishedCourseList" :key="type==='0'?item.courseId:item.catalogId" @click="toDetail(type==='0'?item.courseId:item.catalogId)">
+          <span>
+            <span>
+              <img :src="type==='0'?coursePrefix + item.coursePathCover + suffix:catalogPrefix + item.catagory_img + suffix" alt class="commonImgStyle" />
+            </span>
+            <p style="margin-top:0.1rem;margin-bottom:0.1rem" class="commonText">{{type==='0'?item.courseName:item.catalogName}}</p>
+            <span class="barContainer">
+              <span class="barContainerChildren progressBar">
+                <span class="progressBarConduct" :style="{width:type==='0'?item.currentStudyTime / item.courseTotalTime * 100 + '%':item.catalogFinishiTime / item.catalogTotalTime * 100 + '%',display:barBlock,background:barColor,height:barHeight,'border-radius': '0 0.1rem 0.1rem 0'}"></span>
+              </span>
+              <em class="progressBarSize">{{type==='0'?item.currentStudyTime / item.courseTotalTime * 100 + '%':(item.catalogFinishiTime / item.catalogTotalTime * 100).toFixed(0) + '%'}}</em>
+            </span>
+          </span>
+        </div>
+      </div>
+      <no-more v-if="noMoreFalge"></no-more>
+      <!-- <div class="noMore" v-if="noMoreFalge">-- 没有更多 --</div> -->
+    </div>
+  </div>
+</template>
+<script>
+import { finishedCourses, unFinishedCourses, catalogCourses } from "../../../api/finishedCourses.js";
+export default {
+  name: "planCourseList",
+  components: {},
+  props: {},
+  data() {
+    return {
+      keyword: '',
+      barHeight: '0.1rem',
+      barColor: '#cb0a0f',
+      barBlock: "block",
+      unfinishedCourseList: [],
+      finishedCourseList: [],
+      list: [],//存放搜索结果数据
+      coursePrefix: this.$title + this.$coursePrefix,
+      catalogPrefix: this.$title + this.$catalogPrefix,
+      suffix: '&TOKEN=' + this.$token,
+      type: this.$route.query.type,//选修还是必修
+      index: this.$route.query.index,//已完成还是未完成
+      placeHolder: this.$route.query.type == 0 ? '输入课程名称' : '输入课程分类名称',
+      defaultFlag: true,
+      noMoreFalge: false
+    };
+  },
+  computed: {
+    hasNoData() {
+      return !this.list.length;
+    }
+  },
+  watch: {
+    keyword() {//监听搜索
+      if (!this.list) {
+        this.list = [];
+        return;
+      }
+      const result = [];
+      let courseList = [];
+      if (this.index === 0) {//未完成
+        courseList = this.unfinishedCourseList;
+      } else {//已完成
+        courseList = this.finishedCourseList;
+      }
+      for (let i in courseList) {
+        if (courseList[i].courseName.indexOf(this.keyword) > -1) {
+          result.push(courseList[i]);
+        }
+      }
+      this.list = result;
+    },
+    finishedCourseList() {
+      this.$nextTick(function () {
+        this.defaultFlag = false;
+        this.noMoreFalge = true;
+      });
+    },
+    unfinishedCourseList() {
+      this.$nextTick(function () {
+        this.defaultFlag = false;
+        this.noMoreFalge = true;
+      });
+    }
+  },
+  methods: {
+    getUnfinishedCourses(res) {
+      if (res.successful) {
+        this.unfinishedCourseList = res.resultValue.items;
+      }
+    },
+    getFinishedCourses(res) {
+      if (res.successful) {
+        this.finishedCourseList = res.resultValue.items;
+      }
+    },
+    getCatalogCourses(res) {
+      if (res.successful) {
+        if (this.index === 0) {//未完成
+          this.unfinishedCourseList = res.resultValue.unfinishedList;
+        } else {//已完成
+          this.finishedCourseList = res.resultValue.finishedList;
+        }
+      }
+    },
+    toDetail(id) {
+      if (this.type === '0') {
+        //con
+      } else {
+        this.$router.push({
+          path: "/catalogList",
+          query: {
+            catalogId: id
+          }
+        });
+      }
+    },
+    childrenEvent(e) {
+      this.keyword = e;
+    }
+  },
+  mounted() {
+    if (this.type === '0' && this.index === 0) {//必修未完成
+      unFinishedCourses(this.$title, this.$token).then(this.getUnfinishedCourses);
+    } else if (this.type === '0' && this.index === 1) {//必修已完成
+      finishedCourses(this.$title, this.$token).then(this.getFinishedCourses);
+    } else if (this.type === '1') {//选修
+      catalogCourses(this.$title, 2, this.$token).then(this.getCatalogCourses);
+    }
+  }
+};
+</script>
+<style lang='scss' type='text/css' scoped>
+@import "../../../style/courseList/courseList.scss";
+</style>

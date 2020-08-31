@@ -1,0 +1,239 @@
+<template>
+  <div class="learningNotes">
+    <!-- 头部 -->
+    <HeaderTitle :title="title" :titleFlag="titleFlag" :titleIcon="titleIcon"></HeaderTitle>
+    <!-- 内容区 -->
+    <div style="overflow:auto;margin-top: 0.32rem;">
+      <div class="learningData" v-for="(items,index) in notesData" :key="index">
+        <span>
+          <van-icon name="ellipsis" style="font-size:30px" @click="more(items)" />
+          <!-- 隐藏的下拉框 点击...显示 -->
+          <van-popup v-model="show" closeable position="bottom" :style="{ height: '30%' }">
+            <div class="operation">
+              <span
+                style="padding-left:0rem;padding-right:0rem;font-size: 15px;"
+                v-for="(item,indexs) in operationData"
+                :key="indexs"
+                @click="operationClick(item)"
+              >
+                <van-icon :name="item.iconValue" class="iconStyle" />
+                {{item.value}}
+              </span>
+              <!-- 分享 -->
+              <span
+                style="padding-left:0rem;padding-right:0rem;font-size: 15px;"
+                v-if="items.isShare == 0?true:false"
+                @click="ShareClick()"
+              >
+                <van-icon name="replay" class="iconStyle" />分享
+              </span>
+              <!-- 取消分享 -->
+              <span
+                style="padding-left:0rem;padding-right:0rem;font-size: 15px;"
+                v-if="items.isShare == 1?true:false"
+                @click="cancelSharing()"
+              >
+                <van-icon name="replay" class="iconStyle" />取消
+                <br />分享
+              </span>
+            </div>
+          </van-popup>
+        </span>
+        <span @click="details(items)" style="font-size:16px">
+          <van-icon name="edit" style="font-size: 16px;vertical-align: text-top;" />
+          笔记：{{items.noteContent}}
+        </span>
+        <span>
+          <em>中国共产党的创立</em>
+        </span>
+        <span>{{items.noteUpdateTime}}</span>
+      </div>
+      <no-more></no-more>
+      <!-- <div class="noMore">-- 没有更多 --</div> -->
+    </div>
+  </div>
+</template>
+<script>
+import {
+  notes,
+  deleteNotes,
+  shareNotes,
+  cancelshareNotes
+} from "../../api/learningNotes.js";
+import { Dialog } from "vant";
+export default {
+  name: "learningNotes",
+  components: {},
+  watch: {},
+  props: {},
+  data() {
+    return {
+      title: "学习笔记",
+      titleFlag: true,
+      titleIcon: "edit",
+      notesData: [], //接收返回的所有数据
+      show: false,
+      // shareFlag: false, //控制取消收藏 显示隐藏s
+      operationData: [
+        {
+          id: 0,
+          value: "编辑",
+          iconValue: "edit"
+        },
+        {
+          id: 1,
+          value: "删除",
+          iconValue: "delete"
+        }
+      ],
+      activeData: ""
+    };
+  },
+  computed: {},
+  methods: {
+    //   三个点 点击事件
+    more(items) {
+      this.show = true;
+      this.activeData = items;
+    },
+    // 获取学习笔记数据
+    getNotes() {
+      var _this = this;
+      var title = _this.$title;
+      var token = _this.$token;
+      // var pageSize = 20;
+      // var pageNumber = 1;
+      var phone = 1593666764625; //获取用户信息后获得
+      notes(title, token, _this.notesData.length, _this.notesData.length, phone)
+        .then(res => {
+          // 接收返回的所有数据
+          _this.notesData = res.resultValue.items;
+        })
+        .catch(function(err) {
+          console.log(err);
+        });
+    },
+    // 操作点击
+    operationClick(item) {
+      // 0编辑、1删除、2分享
+      if (item.id == 0) {
+        this.$router.push({
+          path: "/noteEdit",
+          query: {
+            value: this.activeData
+          }
+        });
+      } else if (item.id == 1) {
+        Dialog.confirm({
+          title: "删除笔记",
+          message: "是否确认删除 " + this.activeData.noteContent + " 该笔记"
+        })
+          .then(() => {
+            // on confirm
+            this.deleteNote();
+            this.getNotes();
+          })
+          .catch(() => {
+            // on cancel
+          });
+      }
+    },
+    //笔记详情跳转
+    details(items) {
+      this.$router.push({
+        path: "/noteDetails",
+        query: {
+          value: items
+        }
+      });
+    },
+    // 删除笔记
+    deleteNote() {
+      var _this = this;
+      deleteNotes(_this.$title, this.activeData.noteId, _this.$token)
+        .then(res => {
+          console.log(res);
+          this.getNotes();
+          this.show = false;
+        })
+        .catch(res => {
+          console.log(res);
+        });
+    },
+    // 分享点击事件
+    ShareClick() {
+      Dialog.confirm({
+        title: "分享笔记",
+        message: "是否确认分享 " + this.activeData.noteContent + " 该笔记"
+      })
+        .then(() => {
+          // on confirm
+          this.shareFunction();
+        })
+        .catch(() => {
+          // on cancel
+        });
+    },
+    // 分享函数
+    shareFunction() {
+      shareNotes(this.$title, this.activeData.noteId, this.$token)
+        .then(res => {
+          console.log(res, "123456");
+          if (res.successful) {
+            this.show = false;
+            this.getNotes();
+            this.$dislog("分享成功");
+          } else {
+            this.show = true;
+          }
+        })
+        .catch(res => {
+          console.log(res);
+        });
+    },
+    // 取消分享函数
+    canselShare() {
+      cancelshareNotes(this.$title, this.activeData.noteId, this.$token)
+        .then(res => {
+          if (res.successful) {
+            this.show = false;
+            this.getNotes();
+             this.$dislog("已取消分享");
+          } else {
+            this.show = true;
+          }
+        })
+        .catch(res => {
+          console.log(res);
+        });
+    },
+    // 取消分享点击事件
+    cancelSharing() {
+      Dialog.confirm({
+        title: "取消分享",
+        message: "是否确认取消分享 " + this.activeData.noteContent + " 该笔记"
+      })
+        .then(() => {
+          // on confirm
+          this.canselShare();
+        })
+        .catch(() => {
+          // on cancel
+        });
+    }
+  },
+  created() {
+    //   执行获取学习笔记方法
+    this.getNotes();
+  },
+  mounted() {}
+};
+</script>
+<style lang='scss' type='text/css' scoped>
+// 与学习心得共用一套css
+@import "../../style/learningNotesOrExperience/learningNotesOrExperience.scss";
+// 确认框确认字体颜色
+/deep/.van-dialog__confirm:active {
+  color: #ee2400;
+}
+</style>

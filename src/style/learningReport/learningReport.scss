@@ -1,0 +1,51 @@
+.learningReport {
+    background: #f8f8f8;
+    display: flex;
+    flex-direction: column;
+    // 统计div
+    .learningReportData {
+      overflow: auto;
+      margin-top: 0.32rem;
+      // ecarts div
+      #myChart {
+        background: #fff;
+        height: 3.64rem;
+        padding-top: 0.44rem;
+        border-bottom: 1px solid #ccc;
+      }
+      .statisticsDiv {
+        width: 100%;
+        height: 0.75rem;
+        display: flex;
+        border-bottom: 1px solid #d9d9d9;
+        margin-bottom: 0.08rem;
+        background: #fff;
+        justify-content: space-between;
+        align-items: center;
+        padding-left: 0.16rem;
+        padding-right: 0.16rem;
+        span {
+          font-size: 15px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+        span:nth-child(1) {
+          .iconColor {
+            color: #cb0a0f;
+            font-size: 23px;
+            margin-right: 0.05rem;
+          }
+          em {
+            height: 23px;
+            line-height: 25px;
+            color: #707070;
+          }
+        }
+        span:nth-child(2) {
+          color: #000;
+          font-weight: 700;
+        }
+      }
+    }
+  }

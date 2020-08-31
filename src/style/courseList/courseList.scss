@@ -1,0 +1,118 @@
+.compulsoryDiv {
+    /deep/.van-loading {
+      text-align: center;
+    }
+    
+    .complete {
+      margin-top: 0.9rem;
+      padding-bottom: 0rem;
+      .tabDataChildren {
+        font-size: 16px;
+        padding-bottom: 0.1rem;
+        padding-top: 0.1rem;
+        background: #fff;
+        border-radius: 0.05rem;
+        img {
+          width: 100%;
+          height: 100%;
+          border-radius: 0.05rem;
+        }
+        .barContainer {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding-bottom: 0.1rem;
+          width: 100%;
+          .barContainerChildren {
+            display: block;
+            height: 0.1rem;
+            background: #ccc;
+            width: 85%;
+            border-radius: 0 0.1rem 0.1rem 0;
+            
+          }
+          em {
+            color: #999;
+            font-size: 15px;
+          }
+        }
+      }
+      .tabDataChildren:nth-child(1){
+        border-top: none;
+      }
+    }
+    .noMore {
+      text-align: center;
+      font-size: 15px;
+      height: 0.5rem;
+      line-height: 0.5rem;
+      color: #666;
+      background: #f8f8f8;
+    }
+  }
+// 按课程显示必修课
+.tabDatacompulsory {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  .tabDataChildren {
+    border-top: none !important;
+    span:nth-child(1){
+      width: 100%;
+      height: auto !important;
+    }
+    .barContainerParent {
+      padding-right: 0rem;
+      width: 86%;
+    }
+    width: 47%;
+    padding-left: 0rem;
+    padding-right: 0rem;
+    span:nth-child(1) {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+    }
+  }
+}
+// 按分类显示必修课
+.tabData{
+  .tabDataChildren {
+    padding-left: 0.15rem;
+    padding-right: 0.15rem;
+    border-top: 1px solid #f8f8f8;
+    display: flex !important;
+    flex-direction: row-reverse !important;
+    .barContainerParent {
+      padding-right: 0.15rem;
+      width: 86%;
+      .commonText {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
+        font-size: 13px !important;
+      }
+      .barContainer {
+        .barContainerChildren {
+          width: 70% !important;
+          height: 0.05rem !important;
+          .progressBarConduct {
+            height: 0.05rem !important;
+          }
+        }
+        .progressBarSize {
+          font-size: 13px !important;
+        }
+      }
+    }
+    // span:nth-child(1) {
+    //   display: flex;
+    //   flex-direction: row-reverse;
+    //   align-items: center;
+    // }
+  }
+}

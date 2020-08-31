@@ -1,0 +1,201 @@
+<template>
+  <div class="classHourDiv">
+    <!-- logo -->
+    <div class="timeLogoDiv">
+      <div style="padding:0rem 0 0 0.1rem">
+        <img :src="imgUrl" alt style="width:1.3rem;height:1.3rem" />
+      </div>
+      <div class="userContainer">
+        <span class="user">用户名:&nbsp;{{userName}}</span>
+        <span class="hour">
+          <span>必修课时:&nbsp;{{compulsory}}</span>
+          <span>选修课时:&nbsp;{{elective}}</span>
+        </span>
+      </div>
+    </div>
+    <div style="background:#fafafc;position: absolute;width: 100%;">
+      <!-- 两大课时 -->
+      <div class="classHour">
+        <div class="classHourChildren">
+          <h1>{{totalHour}}</h1>
+          <p class="classTourText">目标课时</p>
+        </div>
+        <span class="border"></span>
+        <div class="classHourChildren">
+          <h1 style="color:#5eb4f0">{{alreadyHour}}</h1>
+          <p class="classTourText">已修课时</p>
+        </div>
+      </div>
+      <!-- 学习笔记、学习心得、学习统计、扫一扫 -->
+      <div class="list">
+        <div class="listChildren" v-for="(item,index) in operationList" :key="index" @click="tabClick(item)">
+          <img :src="item.imgUrl" alt="">
+          <p class="classTourText">{{item.value}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+<script>
+import {
+  classHourTotal,
+  classHouralready,
+  classHourcompulsory,
+  classHourelective
+} from "../../../api/enterpriseCredit.js";
+export default {
+  name: "classHour",
+  components: {},
+  watch: {},
+  props: {},
+  data() {
+    return {
+      imgUrl: require("../../../assets/logo.png"),//logo
+      // 操作
+      operationList: [
+        {
+          id: 0,
+          imgUrl: require("../../../assets/4.png"),
+          value: "学习笔记"
+        },
+        {
+          id: 1,
+          imgUrl: require("../../../assets/3.png"),
+          value: "学习心得"
+        },
+        {
+          id: 2,
+          imgUrl: require("../../../assets/2.png"),
+          value: "学习统计"
+        },
+        {
+          id: 3,
+          imgUrl: require("../../../assets/1.png"),
+          value: "扫一扫"
+        }
+      ],
+      userName: "张志行",//回去用户名
+      compulsory: "", //必修课时
+      elective: "", //选修课时
+      totalHour: "", //总课时
+      alreadyHour: "" //已修课时
+    };
+  },
+  computed: {},
+  methods: {
+    // 获取课时
+    obtainClassHour() {
+      var _this = this;
+      var token = _this.$token; // eslint-disable-line no-unused-vars
+      var title = _this.$title;
+      // 总课时
+      classHourTotal(title, token)
+        .then(function (res) {
+          _this.totalHour = Math.round(res.resultValue);
+        })
+        .catch(function (err) {
+          console.log(err, "error");
+        });
+      //已修课时
+      classHouralready(title, new Date().getFullYear(), token)
+        .then(function (res) {
+          _this.alreadyHour = res.resultValue / (60 * 45);
+        })
+        .catch(function (err) {
+          console.log(err, "error");
+        });
+      //必修课时
+      classHourcompulsory(title, token)
+        .then(function (res) {
+          _this.compulsory = Math.round(res.resultValue.totalTime / (60 * 45));
+        })
+        .catch(function (err) {
+          console.log(err, "error");
+        });
+      //选修课时
+      classHourelective(title, _this.cateGory.category.optional.key, token)
+        .then(function (res) {
+          _this.elective = _this.secondToHour(res.resultValue.totalTime);
+        })
+        .catch(function (err) {
+          console.log(err, "error");
+        });
+    },
+    // 操作列表点击事件
+    tabClick(item) {
+      var _id = item.id;
+      switch (_id) {
+        // 学习笔记
+        case 0: this.$router.push({ path: "/learningNotes" });
+          break;
+        //  学习心得
+        case 1: this.$router.push({ path: "/learningExperience" });
+          break;
+        // 学习报表
+        case 2:
+          this.$router.push({ path: "/learningReport" });
+          break;
+        // 执行扫一扫
+        case 3: this.carryScanCode();
+      }
+    },
+    // 扫一扫
+    carryScanCode() {
+      // 如果在钉钉环境中
+      if (this.$dd.env.platform !== 'notInDingTalk') {
+        this.$dd.ready(() => {
+          alert("扫一扫");
+          // dd.ready参数为回调函数，在环境准备就绪时触发，jsapi的调用需要保证在该回调函数触发后调用，否则无效。
+          this.$dd.runtime.permission.requestAuthCode({
+            corpId: this.$corpid,
+            onSuccess: function (result) {
+              alert(result);
+              /*{
+                  code: 'hYLK98jkf0m' //string authCode
+              }*/
+              this.$dd.biz.util.scan({
+                type: String, // type 为 all、qrCode、barCode，默认是all。
+                onSuccess: function (data) {
+                  console.log(data)
+                  //onSuccess将在扫码成功之后回调
+                  /* data结构
+                    { 'text': String}
+                  */
+                },
+                onFail: function (err) {
+                  console.log(err)
+                }
+              })
+            },
+            onFail: function (err) {
+              console.log(err)
+            }
+
+          });
+          this.$dd.error(function (error) {
+            /**
+             {
+                errorMessage:"错误信息",// errorMessage 信息会展示出钉钉服务端生成签名使用的参数，请和您生成签名的参数作对比，找出错误的参数
+                errorCode: "错误码"
+             }
+            **/
+            alert('dd error: ' + JSON.stringify(error));
+          });
+
+        })
+      }
+
+
+    }
+  },
+
+  created() {
+    // 调用获取课时方法
+    this.obtainClassHour();
+  },
+  mounted() { }
+};
+</script>
+<style lang='scss' type='text/css' scoped>
+@import "../../../style/classHour/classHour.scss";
+</style>

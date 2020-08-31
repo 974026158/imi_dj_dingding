@@ -1,0 +1,75 @@
+<template>
+  <div class="noteEdit">
+    <HeaderTitle :title="title" :titleFlag="titleFlag"></HeaderTitle>
+    <div class="container">
+      <van-field
+        v-model="message"
+        rows="2"
+        autosize
+        type="textarea"
+        maxlength="150"
+        placeholder="请输入笔记"
+        show-word-limit
+      />
+      <div class="button" @click="submit()">提交</div>
+    </div>
+  </div>
+</template>
+
+<script>
+import { editNotes } from "../../api/learningNotes.js";
+export default {
+  name: "noteEdit",
+  components: {},
+  watch: {},
+  props: {},
+  data() {
+    return {
+      title: "编辑笔记",
+      titleFlag: true,
+      message: "",
+      ID: ""
+    };
+  },
+  computed: {},
+  methods: {
+    // 获取路由传过来的值
+    getData() {
+      var data = this.$route.query.value;
+      this.message = data.noteContent; //输入框内容
+      this.ID = data.noteId; //获取id
+    },
+    // 按钮点击事件
+    submit() {
+      this.editNotesFunciton();
+    },
+    // 编辑笔记
+    editNotesFunciton() {
+      var _this = this;
+      var req = {
+        items: [
+          {
+            noteId: this.ID,
+            noteContent: this.message
+          }
+        ]
+      };
+      editNotes(_this.$title,_this.$token, req)
+        .then(res => {
+          console.log(res);
+          this.$router.go(-1);
+        })
+        .catch(function(err) {
+          console.log(err);
+        });
+    }
+  },
+  created() {
+    this.getData();
+  },
+  mounted() {}
+};
+</script>
+<style lang='scss' type='text/css' scoped>
+@import "../../style/editNoteOrExperience/editNoteOrExperience.scss";
+</style>

@@ -1,0 +1,97 @@
+.courseLearning {
+    background: #f8f8f8 !important;
+    // tab切换选中后的颜色
+    .active {
+      background: #fff !important;
+      border-color: #9ae199 !important;
+    }
+    // tab切换显示的视频两个字的背景颜色
+    .activeVideo {
+      background: #0bb20d !important;
+    }
+    .courseLearningCon {
+        // 播放视频区
+      .videoDiv {
+        height: 1.94rem;
+      }
+    //   如果没有视频播放显示
+      .noVideo {
+        height: 1.94rem;
+        background: url("../../assets/coverwaiting.png") no-repeat;
+        background-size: 100% 100%;
+      }
+    //   tab切换后的内容区域
+      .sectionDiv {
+        height: 1.215rem;
+        background: #fff;
+        font-size: 20px;
+        font-weight: bold;
+        color: #555;
+        text-align: center;
+        line-height: 1.215rem;
+        margin-bottom: 0.18rem;
+      }
+    //   tab切换区域
+      .sectionDetails {
+        height: 1.93rem;
+        background: #fff;
+        display: flex;
+        flex-direction: column;
+        // 切换区每一个选项
+        .sectionDetailsHeader {
+          height: 0.6rem;
+          display: flex;
+          justify-content: flex-end;
+          align-items: center;
+          padding-right: 0.17rem;
+          font-size: 15px;
+          color: #2a2a2a;
+        }
+        // 选项版心
+        .choose {
+          flex: 1;
+          overflow-x: scroll;
+          padding-left: 0.165rem;
+          padding-right: 0.165rem;
+          .chooseChildren {
+            display: block;
+            border: 2px solid #fff;
+            background: #f5f5f5;
+            margin-left: 0.33rem;
+            width: 1.65rem;
+            height: 1.12rem;
+            position: relative;
+            border-radius: 0.05rem;
+            float: left;
+            .chooseVideo {
+              width: 0.3rem;
+              height: 0.24rem;
+              background: #9c9c9c;
+              font-size: 11px;
+              color: #fff;
+              position: absolute;
+              text-align: center;
+              line-height: 0.24rem;
+              top: 0.07rem;
+            }
+            .chooseText {
+              font-size: 16px;
+              font-weight: bold;
+              color: #444;
+              position: absolute;
+              top: 0;
+              bottom: 0;
+              left: 0;
+              right: 0;
+              margin: auto;
+              text-align: center;
+              padding-top: 0.4rem;
+            }
+          }
+          .chooseChildren:nth-child(1) {
+            margin-left: 0rem;
+          }
+        }
+      }
+    }
+  }

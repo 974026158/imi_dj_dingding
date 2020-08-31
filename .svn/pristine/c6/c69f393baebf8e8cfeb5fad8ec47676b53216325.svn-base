@@ -1,0 +1,88 @@
+<template>
+  <div class="trainerIntroduction">
+    <HeaderTitle :title="title" :titleFlag="titleFlag" :titleIcon="titleIcon"></HeaderTitle>
+    <div class="headerBelowContainer">
+      <span class="teacherTop">
+        <span>
+          <van-icon name="manager" style="margin-right:0.03rem;vertical-align: text-top;" />
+          <i>讲师姓名</i>
+        </span>
+        <!-- 讲师姓名 -->
+        <span>{{teacherName}}</span>
+      </span>
+      <span class="teacherTop">
+        <span>
+          <van-icon name="manager" style="margin-right:0.03rem;vertical-align: text-top;" />
+          <i>讲师简介</i>
+        </span>
+        <!-- 讲师简介内容 -->
+        <span>{{teacherValue}}</span>
+      </span>
+    </div>
+  </div>
+</template>
+
+<script>
+import { introduceTeacher } from "../../api/video.js";
+export default {
+  name: "trainerIntroduction",
+  components: {},
+  watch: {},
+  props: {},
+  data() {
+    return {
+      title: "讲师介绍",
+      titleFlag: true,
+      titleIcon: "volume",
+      teacherName: "",
+      teacherValue: ""
+    };
+  },
+  computed: {},
+  methods: {
+    getintroduceTeacher() {
+      var _this = this;
+      var _id = localStorage.getItem("videoData");
+      introduceTeacher(_this.$title, _id, 3, _this.$token).then(res => {
+        if (res.successful) {
+          var _data = res.resultValue;
+          this.teacherName = _data.lesson_courseTeacherName;
+          this.teacherValue = _data.lesson_teacherIntroduction;
+        } else {
+          return false;
+        }
+      });
+    }
+  },
+  created() {
+    this.getintroduceTeacher();
+  },
+  mounted() { }
+};
+</script>
+<style lang='scss' type='text/css' scoped>
+.trainerIntroduction {
+  background: #f8f8f8;
+  .headerBelowContainer {
+    display: flex;
+    flex-direction: column;
+    padding: 0.18rem 0.15rem 0 0.15rem;
+    .teacherTop {
+      display: flex;
+      flex-direction: column;
+      color: #525252;
+      margin-bottom: 0.5rem;
+      span:nth-child(1) {
+        margin-bottom: 0.05rem;
+        font-size: 16px;
+        flex-direction: row;
+        align-items: center;
+      }
+      span:nth-child(2) {
+        font-size: 15px;
+        text-indent: 0.29rem;
+      }
+    }
+  }
+}
+</style>

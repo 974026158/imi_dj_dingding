@@ -1,0 +1,127 @@
+@charset 'utf-8';
+*{box-sizing:border-box;}
+html,body,ul,li,ol,dl,dd,dt,p,h1,h2,h3,h4,h5,h6,form,fieldset,legend,img,input,figure{margin:0;padding:0;}
+h1,h2,h3,h4,h5,h6{font-size:16px;font-weight:normal;}
+i,em{font-style:normal;}
+b,strong{font-weight:normal;}
+u,a{text-decoration: none;}
+ul,li,ol{list-style:none;}
+img{border:0;display:block;}
+input{outline:none;}
+.clear_fix:after{content:'.';display:block;clear:both;height:0;overflow:hidden;visibility:hidden;}
+html,body{height:100%;}
+body{display:flex;flex-direction:column;font-family:"微软雅黑";}
+html{font-size:26.67vw;}
+/* tabbar页面 */
+.enterpriseCredit,.mailList,.work,.mine,.realTimeInfo{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    /* padding-bottom: 0.51rem; */
+    overflow: auto;
+}
+/* 学习报表 学习心得 学习笔记最大容器 */
+.learningReport,
+.learningNotes,
+.noteDetails,
+.noteEdit,
+.experienceEdit,
+.experienceAdd,
+.courseLearning,
+.courseintroduction,
+.courseEvaluate,
+.courseComment,
+.trainerIntroduction,
+.microLecture,
+.publishcoursereComment{
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    position: absolute;
+    z-index: 1;
+  }
+  /* 首页新样式 */
+  .indexContainer{
+    overflow:auto;
+    margin-top: 3.3rem;
+    padding: 0.08rem 0.15rem 0.15rem 0.15rem;
+  }
+  .compulsoryDiv{
+    box-shadow: 0px 5px 5px -5px #ccc;
+  }
+/* 头部下面的容器*/
+.headerBelowContainer{
+    overflow:auto;
+    margin-top: 0.32rem;
+}
+/* 没有更多 */
+.noMore{
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+    display: block;
+    height: 0.5rem;
+    line-height: 0.5rem;
+    background: #f8f8f8;
+}
+/* 更多 */
+.commonMore{
+    color: #7f7f7f !important;
+    font-size: 14px !important;
+}
+/* 头部背景颜色 */
+.componentHeaderStyle{
+    background: #cb0a0f !important;
+}
+/* 头部字体与图标 */
+.headerTitleCommon{
+    font-size: 20px !important;
+}
+/* 导航组件 */
+.headerNavigation{
+    background: #e0e0e0 !important;
+}
+/* 进度条 */
+.progressBar{
+    background: #eaeaea !important;
+}
+/* 进度条进度中 */
+.progressBarConduct{
+    background: #33cbf1 !important;
+}
+/* 进度条字体颜色 */
+.progressBarSize{
+    color: #33cbf1 !important;
+}
+/* 首页选修 必修 微课内容字体 */
+.commonText{
+    font-size: 14px !important;
+    color: #000 !important;
+}
+/* 所有图片边框 */
+.commonImgStyle{
+    border: 1px solid #ccc !important ;
+}
+/* 首页学时 笔记 心得 等字体 */
+.commontClassHour{
+    color: #fff !important;
+}
+/* 选秀 必修 微课头部 */
+.recommend{
+    color: #666 !important;
+    font-size: 14px !important;
+}
+/* 讲师 */
+.commonTextTeacher{
+    color: #666;
+    font-size: 13px !important;
+    font-weight: normal !important;
+}
+/* 首页下边线 */
+.tabData div:nth-child(2){
+    border-bottom-color: red !important;
+    border-top-color: red !important;
+}
+.placeholderBorder{
+    background: red !important;
+}

@@ -1,0 +1,90 @@
+// 头部最大容器
+.classHourDiv {
+    .timeLogoDiv,
+    .userContainer,
+    .hour,
+    .classHour,
+    .classHourChildren,
+    .list,
+    .listChildren {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
+    // logo 用户名 课时
+    .timeLogoDiv {
+      height: 1.55rem;
+      background: #cb0a0f;
+      .userContainer {
+        flex: 1;
+        padding-bottom: 0.6rem;
+        flex-direction: column;
+        justify-content: flex-end !important;
+        padding-left: 0.15rem;
+        padding-right: 0.15rem;
+        .user {
+          font-size: 13px;
+          width: 2.05rem;
+          margin-bottom: 0.1rem;
+          color: #fff;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
+        }
+        .hour {
+          align-self: flex-end;
+          justify-content: space-between;
+          width: 100%;
+          span {
+            font-size: 13px;
+            color: #fec104;
+          }
+        }
+      }
+    }
+    // 两大课时 目标课时 已修课时
+    .classHour {
+      height: 1.1rem;
+      background: #fff;
+      width: 57%;
+      margin-left: 1.5rem;
+      margin-top: -0.7rem;
+      border-radius: 0.05rem;
+      box-shadow: 0px 5px 5px -5px #ccc;
+      .classHourChildren {
+        flex-direction: column;
+        height: 80%;
+        h1 {
+          color: #fec104;
+          font-size: 50px;
+        }
+        p {
+          font-size: 13px;
+          color: #939393;
+        }
+      }
+      .border {
+        display: block;
+        height: 40%;
+        width: 0.02rem;
+        background: #f7f7f7;
+      }
+    }
+    // 操作列表
+    .list {
+      height: 1rem;
+      .listChildren {
+        flex-direction: column;
+        height: 100%;
+        img {
+          width: 0.55rem;
+          height: 0.55rem;
+          border-radius: 50%;
+        }
+        p {
+          font-size: 13px;
+          color: #939393;
+        }
+      }
+    }
+  }

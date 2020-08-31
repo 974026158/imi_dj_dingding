@@ -1,0 +1,98 @@
+.classHourDiv .timeLogoDiv,
+.classHourDiv .userContainer,
+.classHourDiv .hour,
+.classHourDiv .classHour,
+.classHourDiv .classHourChildren,
+.classHourDiv .list,
+.classHourDiv .listChildren {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.classHourDiv .timeLogoDiv {
+  height: 1.55rem;
+  background: #cb0a0f;
+}
+
+.classHourDiv .timeLogoDiv .userContainer {
+  flex: 1;
+  padding-bottom: 0.6rem;
+  flex-direction: column;
+  justify-content: flex-end !important;
+  padding-left: 0.15rem;
+  padding-right: 0.15rem;
+}
+
+.classHourDiv .timeLogoDiv .userContainer .user {
+  font-size: 13px;
+  width: 2.05rem;
+  margin-bottom: 0.1rem;
+  color: #fff;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.classHourDiv .timeLogoDiv .userContainer .hour {
+  align-self: flex-end;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.classHourDiv .timeLogoDiv .userContainer .hour span {
+  font-size: 13px;
+  color: #fec104;
+}
+
+.classHourDiv .classHour {
+  height: 1.1rem;
+  background: #fff;
+  width: 57%;
+  margin-left: 1.5rem;
+  margin-top: -0.7rem;
+  border-radius: 0.05rem;
+  box-shadow: 0px 5px 5px -5px #ccc;
+}
+
+.classHourDiv .classHour .classHourChildren {
+  flex-direction: column;
+  height: 80%;
+}
+
+.classHourDiv .classHour .classHourChildren h1 {
+  color: #fec104;
+  font-size: 50px;
+}
+
+.classHourDiv .classHour .classHourChildren p {
+  font-size: 13px;
+  color: #939393;
+}
+
+.classHourDiv .classHour .border {
+  display: block;
+  height: 40%;
+  width: 0.02rem;
+  background: #f7f7f7;
+}
+
+.classHourDiv .list {
+  height: 1rem;
+}
+
+.classHourDiv .list .listChildren {
+  flex-direction: column;
+  height: 100%;
+}
+
+.classHourDiv .list .listChildren img {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+}
+
+.classHourDiv .list .listChildren p {
+  font-size: 13px;
+  color: #939393;
+}

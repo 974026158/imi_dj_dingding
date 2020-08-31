@@ -1,0 +1,61 @@
+import Vue from 'vue';
+import App from './App.vue';
+import router from './router';
+import store from './store';
+import "./style/common/common.css";
+import Vant from 'vant';
+import 'vant/lib/index.css';
+import HeaderTitle from './components/headerTitle/headerTitle.vue';
+import HeaderSearch from "./components/headerSearch/headerSearch.vue";
+import HeaderNavigation from "./components/headerNavigation/headerNavigation.vue";
+import NOmore from "./components/noMore/noMore.vue";
+import http from "./utils/http.js";
+import echarts from 'echarts';
+import dialog from "./utils/dialog.js";
+import { Toast } from "vant";
+// import { Dialog } from 'vant';
+Vue.use(Vant);
+//全局组件
+Vue.component("HeaderTitle", HeaderTitle);
+Vue.component("header-search", HeaderSearch);
+Vue.component("header-navigation", HeaderNavigation);
+Vue.component("no-more", NOmore);
+Vue.config.productionTip = false;
+Vue.prototype.$title = "http://wsdx.sgcc.com.cn/api";
+Vue.prototype.$videoUrl = "http://wsdx.sgcc.com.cn/app/video/";
+Vue.prototype.$videoUrlCdn = "http://cdnwsdx.sgcc.com.cn/app/video/";
+Vue.prototype.$coursePrefix = "/resourcemanage/course/showCover/?url=";
+Vue.prototype.$catalogPrefix = "/resourcemanage/catalog/showCover/?url=";
+// http://cdnwsdx.sgcc.com.cn/app/video/
+Vue.prototype.$Toast = Toast;
+// Vue.prototype.$Dialog = Dialog;
+Vue.prototype.secondToHour = function (second) {
+  if (second % 2700.0 != 0) return Math.floor((second / 2700.0) * 10) / 10;
+  else return second / 2700;
+};
+// 时间戳转换
+Vue.prototype.timestampToTime = function (data) {
+  var date = new Date(data)
+  var Y = date.getFullYear() + '年'
+  var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '月'
+  var D = (date.getDate() < 10 ? '0' + date.getDate() : date.getDate()) + ' 日'
+  return Y + M + D
+}
+Vue.prototype.cateGory = {
+  category: {
+    "required": { "key": "1", value: "必修课" },
+    "optional": { "key": "2", value: "选修课" },
+    "micro": { "key": "3", value: "微课" }
+  }
+}
+var token = localStorage.getItem("token");
+Vue.prototype.$token = token;
+Vue.prototype.$dislog = dialog;
+// 引入echarts
+Vue.prototype.$echarts = echarts;
+Vue.prototype.$http = http;
+new Vue({
+  router,
+  store,
+  render: h => h(App)
+}).$mount('#app')

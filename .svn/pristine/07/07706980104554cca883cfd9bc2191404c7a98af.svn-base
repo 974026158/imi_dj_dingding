@@ -1,0 +1,57 @@
+@charset "UTF-8";
+/* 笔记详情 心得详情 */
+.noteDetails h2 {
+  font-size: 18px;
+  font-weight: bold;
+  padding-left: 0.5rem;
+  text-indent: -0.38rem;
+  text-align: left;
+  border-bottom: 1px solid #ccc;
+  padding-top: 0.08rem;
+  padding-bottom: 0.08rem;
+}
+
+.noteDetails .detailsDiv {
+  overflow: auto;
+  margin-top: 0.32rem;
+}
+
+.noteDetails .detailsDiv .title {
+  text-align: left;
+  font-size: 15px;
+  color: #666;
+  padding-top: 0.15rem;
+  padding-bottom: 0.15rem;
+  padding-left: 0.5rem;
+  text-indent: -0.38rem;
+}
+
+.noteDetails .detailsDiv .gap {
+  height: 0.05rem;
+  background: #ccc;
+}
+
+.noteDetails .detailsDiv .data {
+  border-bottom: 1px solid #ccc;
+  padding-top: 0.18rem;
+  padding-bottom: 0.18rem;
+  padding-left: 0.1rem;
+  padding-right: 0.1rem;
+  font-size: 16px;
+  word-break: break-all;
+  text-indent: 17px;
+  color: #666;
+  font-family: "Microsoft YaHei";
+}
+
+.noteDetails .detailsDiv .time {
+  padding-right: 0.1rem;
+  padding-top: 0.18rem;
+  padding-bottom: 0.18rem;
+  font-size: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: flex-end;
+  color: #666;
+}

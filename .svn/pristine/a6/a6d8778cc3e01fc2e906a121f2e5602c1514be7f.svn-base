@@ -1,0 +1,235 @@
+<template>
+  <div class="commentDiv">
+    <div v-show="defaultFlag" class="defaultFlag">
+      <!-- #1989fa -->
+      <van-loading size="24px" color="#ee2400" type="spinner">数据加载中...</van-loading>
+    </div>
+    <!-- discussReplyId-->
+    <div v-for="(item,index) in this.commentList" :key="index" class="container">
+      <!-- 回复 -->
+      <div class="nickNameDiv">
+        <em>{{item.username}}</em>
+        <em>回复</em>
+        <em>{{item.replyusername}}</em>
+        <em style="color:#222;font-weight:bold">:</em>
+        <em style="color:#333">{{item.replyContent}}</em>
+      </div>
+      <!-- 操作 -->
+      <div class="operationDiv">
+        <em>{{item.replyTime}}</em>
+        <!-- 点赞 -->
+        <span>
+          <i style="vertical-align: sub;">{{item.ReplyLikeNum}}</i>
+          <img
+            src="../../../assets/plus.png"
+            alt
+            style="margin-right:0.2rem;vertical-align: text-top;"
+            @click="getvoteLike(item)"
+            v-if="item.userReplyLikeNum>0?false:true"
+          />
+          <img
+            src="../../../assets/acitveplus.png"
+            alt
+            style="margin-right:0.2rem;vertical-align: text-top;"
+            @click="getvoteLike(item)"
+            v-if="item.userReplyLikeNum>0?true:false"
+          />
+        </span>
+        <span>
+          <!-- 踩 -->
+          <i style="vertical-align: sub;">{{item.ReplyDisLikeNum}}</i>
+          <img
+            src="../../../assets/step.png"
+            alt
+            @click="vote(item)"
+            v-if="item.userReplyDisLikeNum>0?false:true"
+          />
+          <img
+            src="../../../assets/activestep.png"
+            alt
+            @click="vote(item)"
+            v-if="item.userReplyDisLikeNum>0?true:false"
+          />
+        </span>
+        <em @click="reply(item,index)">回复</em>
+        <em style="color:#ee2400" @click="deleteDiscuss(item)">删除</em>
+      </div>
+      <!-- 回复输入框 -->
+      <div style="border-top:5px solid #fff" v-if="index==electiveActive">
+        <reply :displayId='displayId' :repliedId="repliedId" :prove='prove' @commentEvent='commentEvent'></reply>
+      </div>
+    </div>
+  </div>
+</template>
+<script>
+import reply from "../reply/reply.vue";
+import {
+  replyReturn,
+  voteLike,
+  vote,
+  deleteDiscussReply
+} from "../../../api/video.js";
+import { Dialog } from "vant";
+export default {
+  name: "commentOn",
+  components: {
+    reply
+  },
+  watch: {
+    commentList: function() {
+      this.$nextTick(function() {
+        this.defaultFlag = false;
+      });
+    }
+  },
+  props: {
+    commentID: String
+  },
+  data() {
+    return {
+      commentId: this.commentID,
+      commentList: [],
+      defaultFlag: true,
+      electiveActive: -1,
+      displayId:"",
+      repliedId:"",
+      prove:""
+    };
+  },
+  computed: {},
+  methods: {
+    // 回复返回信息接口
+    getreplyReturn() {
+      replyReturn(
+        this.$title,
+        this.commentId,
+        this.$token,
+        5,
+        1,
+        1594103199798
+      ).then(res => {
+        this.commentList = res.resultValue.items;
+      });
+    },
+    // 赞
+    getvoteLike(item) {
+      console.log(item);
+      var _this = this;
+      const req = {
+        items: [{ id: item.discussReplyId, voteType: 5, isLike: 1 }]
+      };
+      voteLike(_this.$title, _this.$token, req).then(() => {
+        this.getreplyReturn();
+        this.$Toast("操作成功");
+      });
+    },
+    // 踩
+    vote(item) {
+      var _this = this;
+      const req = {
+        items: [{ id: item.discussReplyId, voteType: 5, isLike: 0 }]
+      };
+      vote(_this.$title, _this.$token, req).then(() => {
+        this.getreplyReturn();
+        this.$Toast("操作成功");
+      });
+    },
+    // 删除
+    deleteDiscuss(item) {
+      console.log(item.discussReplyId);
+      Dialog.confirm({
+        title: "删除评论",
+        message: "是否确认删除"
+      })
+        .then(() => {
+          // on confirm
+          this.getdeleteDiscuss(item.discussReplyId);
+        })
+        .catch(() => {
+          // on cancel
+        });
+    },
+    getdeleteDiscuss(reqId) {
+      var _this = this;
+      deleteDiscussReply(_this.$title, reqId, _this.$token).then(() => {
+        this.getreplyReturn();
+        this.$Toast("删除成功");
+        this.$emit("replyEvent");
+      });
+    },
+    // 点击回复
+    reply(item, index) {
+      this.displayId = item.discussReplyId;
+      this.repliedId = item.displayId;
+      this.prove = "展开评论"
+      /*
+        displayId: "discussReplyId"
+        isAnonymity: 1
+        repliedId: "displayId"
+        replyContent: "///"
+        replyType: "1"
+      */
+      console.log(item, index); //discussReplyId displayId
+      this.electiveActive = this.electiveActive === index ? -1 : index;
+    },
+    commentEvent(){
+      this.getreplyReturn();
+      this.electiveActive = -1;
+    }
+  },
+  created() {
+    this.getreplyReturn();
+  },
+  mounted() {}
+};
+</script>
+<style lang='scss' type='text/css' scoped>
+@import "../../../style/courseComment/courseComment.scss";
+// 更改loading加载样式
+/deep/.van-loading {
+  display: flex;
+  justify-content: center;
+  background: #f8f8f8;
+  .van-loading__text,
+  .van-loading__spinner--circular,
+  .van-loading__spinner {
+    background: #f8f8f8 !important;
+  }
+}
+.commentDiv {
+  padding-top: 0rem !important;
+  padding-bottom: 0rem !important;
+}
+.container {
+  // height: 0.7rem;
+  // padding-bottom: 0.15rem;
+  padding-top: 0.15rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-bottom: 2px solid #fff;
+  .operationDiv {
+    padding-bottom: 0.15rem;
+  }
+}
+
+.container:last-child {
+  border-bottom: none;
+  // margin-bottom: 0rem;
+  // padding-bottom:0rem;
+}
+.nickNameDiv {
+  display: block !important;
+  margin-left: 0.13rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 0.05rem;
+  em {
+    margin-right: 0.13rem;
+  }
+  em:last-child {
+    margin-right: 0rem;
+  }
+}
+</style>

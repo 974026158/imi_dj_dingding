@@ -1,0 +1,162 @@
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+Vue.use(VueRouter)
+const router = new VueRouter({
+  // mode: 'history',
+  base: process.env.BASE_URL,
+  routes: [
+    {
+      path: "/tabBar",
+      name: "tabBar",
+      component: resolve => require(["../views/tabBar/tabBar.vue"], resolve),
+      meta: {
+        requireAuth: true // 添加该字段，表示进入这个路由是需要登录的 realTimeInfo
+      },
+      children: [
+        {
+          path: "/enterpriseCredit",
+          name: "enterpriseCredit",
+          component: resolve =>
+            require(["../views/enterpriseCredit/enterpriseCredit.vue"], resolve),
+        },
+        {
+          path: "/mailList",
+          name: "mailList",
+          component: resolve =>
+            require(["../views/mailList/mailList.vue"], resolve),
+        },
+        {
+          path: "/work",
+          name: "work",
+          component: resolve =>
+            require(["../views/work/work.vue"], resolve),
+        },
+        {
+          path: "/realTimeInfo",
+          name: "realTimeInfo",
+          component: resolve =>
+            require(["../views/realTimeInfo/realTimeInfo.vue"], resolve),
+        },
+        {
+          path: "/mine",
+          name: "mine",
+          component: resolve =>
+            require(["../views/mine/mine.vue"], resolve),
+        },
+        {
+          path: "/learningNotes",
+          name: "learningNotes",
+          component: resolve =>
+            require(["../components/learningNotes/learningNotes.vue"], resolve),
+        },
+        {
+          path: "/learningExperience",
+          name: "learningExperience",
+          component: resolve =>
+            require(["../components/learningExperience/learningExperience.vue"], resolve),
+        },
+        {
+          path: "/learningReport",
+          name: "learningReport",
+          component: resolve =>
+            require(["../components/learningReport/learningReport.vue"], resolve),
+        },
+        {
+          path: "/noteDetails",
+          name: "noteDetails",
+          component: resolve =>
+            require(["../components/noteDetails/noteDetails.vue"], resolve),
+        },
+        {
+          path: "/experienceDetails",
+          name: "experienceDetails",
+          component: resolve =>
+            require(["../components/experienceDetails/experienceDetails.vue"], resolve),
+        },
+        {
+          path: "/planCourseList",
+          name: "planCourseList",
+          component: resolve =>
+            require(["../views/enterpriseCredit/compulsory/planCourseList.vue"], resolve),
+        },
+        {
+          path: "/catalogList",
+          name: "catalogList",
+          component: resolve =>
+            require(["../views/enterpriseCredit/compulsory/catalogList.vue"], resolve),
+        },
+        {
+          path: "/noteEdit",
+          name: "noteEdit",
+          component: resolve =>
+            require(["../components/noteEdit/noteEdit.vue"], resolve),
+        },
+        {
+          path: "/experienceEdit",
+          name: "experienceEdit",
+          component: resolve =>
+            require(["../components/experienceEdit/experienceEdit.vue"], resolve),
+        },
+        {
+          path: "/experienceAdd",
+          name: "experienceAdd",
+          component: resolve =>
+            require(["../components/experienceAdd/experienceAdd.vue"], resolve),
+        },
+        {
+          path: "/courseLearning",
+          name: "courseLearning",
+          component: resolve =>
+            require(["../components/courseLearning/courseLearning.vue"], resolve),
+        },
+        {
+          path: "/courseintroduction",
+          name: "courseintroduction",
+          component: resolve =>
+            require(["../components/courseintroduction/courseintroduction.vue"], resolve),
+        },
+        {
+          path: "/courseEvaluate",
+          name: "courseEvaluate",
+          component: resolve =>
+            require(["../components/courseEvaluate/courseEvaluate.vue"], resolve),
+        },
+        {
+          path: "/courseComment",
+          name: "courseComment",
+          component: resolve =>
+            require(["../components/courseComment/courseComment.vue"], resolve),
+        },
+        {
+          path: "/trainerIntroduction",
+          name: "trainerIntroduction",
+          component: resolve =>
+            require(["../components/trainerIntroduction/trainerIntroduction.vue"], resolve),
+        },
+        {
+          path: "/publishcoursereComment",
+          name: "publishcoursereComment",
+          component: resolve =>
+            require(["../components/publishcoursereComment/publishcoursereComment.vue"], resolve),
+        },
+        {
+          path: "/microLecture",
+          name: "microLecture",
+          component: resolve =>
+            require(["../components/microLecture/microLecture.vue"], resolve),
+        }
+        // microLecture
+      ]
+    },
+    {
+      path: "/",
+      redirect: "/enterpriseCredit"
+    },
+    // { mailList
+    //   path: "*",
+    //   component: resolve => require(["../views/404.vue"], resolve)
+    // }
+  ]
+})
+
+export default router

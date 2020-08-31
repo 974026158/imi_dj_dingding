@@ -1,0 +1,58 @@
+/* 笔记详情 心得详情 */
+.noteDetails {
+    // 心得详情详情的标题
+    h2{
+        font-size: 18px;
+        font-weight: bold;
+        padding-left: 0.5rem;
+        text-indent: -0.38rem;
+        text-align: left;
+        border-bottom: 1px solid #ccc;
+        padding-top: 0.08rem;
+        padding-bottom: 0.08rem;
+    }
+    // 内容区
+    .detailsDiv {
+      overflow: auto;
+      margin-top: 0.32rem;
+      .title {
+        text-align: left;
+        font-size: 15px;
+        color: #666;
+        padding-top: 0.15rem;
+        padding-bottom: 0.15rem;
+        padding-left: 0.5rem;
+        text-indent: -0.38rem;
+      }
+    //   占位符
+      .gap {
+        height: 0.05rem;
+        background: #ccc;
+      }
+    //   显示的内容
+      .data {
+        border-bottom: 1px solid #ccc;
+        padding-top: 0.18rem;
+        padding-bottom: 0.18rem;
+        padding-left: 0.1rem;
+        padding-right: 0.1rem;
+        font-size: 16px;
+        word-break: break-all;
+        text-indent: 17px;
+        color: #666;
+        font-family: "Microsoft YaHei";
+      }
+    //   底部
+      .time {
+        padding-right: 0.1rem;
+        padding-top: 0.18rem;
+        padding-bottom: 0.18rem;
+        font-size: 16px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: flex-end;
+        color: #666;
+      }
+    }
+  }

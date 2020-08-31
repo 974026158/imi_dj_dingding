@@ -1,0 +1,177 @@
+<template>
+  <div>
+    <div class="enterpriseCredit" v-if="loginFlag">
+      <!-- 顶部红色区域div style="margin-bottom:0.09rem"-->
+      <div style="position: fixed;width:100%;z-index:1">
+        <!-- title -->
+        <HeaderTitle :title="title" :titleFlag="titleFlag" style="position: static;"></HeaderTitle>
+        <!-- logo 报表 笔记 心得  -->
+        <class-hour></class-hour>
+      </div>
+      <van-pull-refresh v-model="refreshing" loading-text="刷新中" success-text="刷新成功" @refresh="onRefresh" head-height="60">
+        <!-- 必修 选修-->
+        <div class="indexContainer" style="background:#fafafc;margin-top:2.12rem">
+          <!-- 学习笔记、学习心得、学习统计、扫一扫 -->
+          <div class="list">
+            <div class="listChildren" v-for="(item,index) in operationList" :key="index" @click="tabClick(item)">
+              <img :src="item.imgUrl" alt="">
+              <p class="classTourText">{{item.value}}</p>
+            </div>
+          </div>
+          <!-- 0必修 1选修-->
+          <div>
+            <plan-course type=0></plan-course>
+            <plan-course type=1></plan-course>
+            <!-- 微课 -->
+            <mic-courses></mic-courses>
+          </div>
+        </div>
+      </van-pull-refresh>
+    </div>
+    <div v-else>
+      <scan-login @loginEvent="loginEvent"></scan-login>
+    </div>
+  </div>
+</template>
+
+<script>
+import classHour from "./classHour/classHour.vue";
+import micCourses from "./micCourses/micCourses.vue"
+import PlanCourse from "../../components/planCourse/planCourse.vue";
+import Login from "../login/login.vue";
+
+// import * as dd from 'dingtalk-jsapi';
+import { Base64 } from 'js-base64';
+
+export default {
+  name: "enterpriseCredit",
+  components: {
+    "class-hour": classHour, //报表 心得 笔记
+    "mic-courses": micCourses, //微课
+    "plan-course": PlanCourse, //选修必修
+    "scan-login": Login
+  },
+  watch: {},
+  props: {},
+  data() {
+    return {
+      title: "网上党校",
+      titleFlag: false,
+      // 操作
+      operationList: [
+        {
+          id: 0,
+          imgUrl: require("../../assets/4.png"),
+          value: "学习笔记"
+        },
+        {
+          id: 1,
+          imgUrl: require("../../assets/3.png"),
+          value: "学习心得"
+        },
+        {
+          id: 2,
+          imgUrl: require("../../assets/2.png"),
+          value: "学习统计"
+        },
+        {
+          id: 3,
+          imgUrl: require("../../assets/1.png"),
+          value: "扫一扫"
+        }
+      ],
+      firstPlayFlag: true,
+      loginFlag: false,
+      refreshing: false,
+      a: ""
+    };
+  },
+  computed: {},
+  methods: {
+    // 获取token     测试环境
+    gettoken(_id) {
+      var _this = this;
+      var title = _this.$title;
+      var req = {
+        method: "/resourceCheck/appLogin",
+        areaId: "xx",
+        iscUserId: _id,
+        baseOrgId: "xxx",
+        baseOrgName: "国网",
+        nameCode: "uap01"
+      };
+
+      _this.$http({
+        method: "post",
+        url: "/api" + title + "/resourcemanage/appapi",
+        data: req
+      })
+        .then(function (res) {
+          if (res.successful) {
+            localStorage.setItem("token", res.resultValue);
+          } else {
+            localStorage.setItem("token", "");
+          }
+        })
+        .catch(function (err) {
+          console.log(err);
+        });
+
+    },
+    // 操作列表点击事件
+    tabClick(item) {
+      var _id = item.id;
+      switch (_id) {
+        // 学习笔记
+        case 0: this.$router.push({ path: "/learningNotes", query: { typePath: "0" } });
+          break;
+        //  学习心得
+        case 1: this.$router.push({ path: "/learningExperience", query: { typePath: "0" } });
+          break;
+        // 学习报表
+        case 2:
+          this.$router.push({ path: "/learningReport" });
+          break;
+        // 执行扫一扫
+        case 3: this.carryScanCode();
+      }
+    },
+    // 扫一扫
+    carryScanCode() { },
+    // 执行子组件自定义事件
+    loginEvent(e) {
+      localStorage.setItem("userid", e);
+      this.gettoken(Base64.decode(e));
+      this.loginFlag = true;
+      location.reload();
+    },
+    // 下拉刷新
+    onRefresh() {
+      setTimeout(() => {
+        if (localStorage.getItem("401Code") == "0") {
+          this.loginFlag = false;
+          this.$router.push({ path: '/' });
+          // location.reload();
+          // this.gettoken(localStorage.getItem("userid"));
+        }
+        this.refreshing = false;
+      }, 1000)
+    }
+  },
+  created() {
+    if (localStorage.getItem("token")) {
+      this.loginFlag = true;
+    } else {
+      this.loginFlag = false;
+    }
+
+  },
+  mounted() {
+    // 获取token
+    // this.gettoken();
+  }
+};
+</script>
+<style lang='scss' type='text/css' scoped>
+@import "../../style/enterpriseCredit/enterpriseCredit.scss";
+</style>

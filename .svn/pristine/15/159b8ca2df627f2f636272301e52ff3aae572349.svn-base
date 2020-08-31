@@ -1,0 +1,80 @@
+<template>
+  <div class="enterpriseCredit">
+    <!-- 顶部红色区域div style="margin-bottom:0.09rem"-->
+    <div style="position: fixed;width:100%;z-index:1">
+      <!-- title -->
+      <HeaderTitle :title="title" :titleFlag="titleFlag" style="position: static;"></HeaderTitle>
+      <!-- logo 报表 笔记 心得  -->
+      <class-hour></class-hour>
+    </div>
+    <!-- 必修 选修-->
+    <div class="indexContainer">
+      <!-- 0必修 1选修-->
+      <plan-course type=0></plan-course>
+      <plan-course type=1></plan-course>
+      <!-- 微课 -->
+      <mic-courses></mic-courses>
+    </div>
+  </div>
+</template>
+
+<script>
+import classHour from "./classHour/classHour.vue";
+import micCourses from "./micCourses/micCourses.vue"
+import PlanCourse from "../../components/planCourse/planCourse.vue";
+export default {
+  name: "enterpriseCredit",
+  components: {
+    "class-hour": classHour, //报表 心得 笔记
+    "mic-courses": micCourses, //微课
+    "plan-course": PlanCourse //选修必修
+  },
+  watch: {},
+  props: {},
+  data() {
+    return {
+      title: "网络学习平台",
+      titleFlag: false
+    };
+  },
+  computed: {},
+  methods: {
+    // 获取token     测试环境
+    gettoken() {
+      var _this = this;
+      var title = _this.$title;
+      var req = {
+        method: "/resourceCheck/appLogin",
+        areaId: "xx",
+        iscUserId: "8a6e50b54dc19a24014dc1af740a1010",
+        baseOrgId: "xxx",
+        baseOrgName: "国网",
+        nameCode: "uap01"
+      };
+      _this.$http({
+        method: "post",
+        url: "/api" + title + "/resourcemanage/appapi",
+        data: req
+      })
+        .then(function (res) {
+          if (res.successful) {
+            localStorage.setItem("token", res.resultValue);
+          } else {
+            localStorage.setItem("token", "");
+          }
+        })
+        .catch(function (err) {
+          console.log(err);
+        });
+    }
+  },
+  created() {
+    // 获取token
+    this.gettoken();
+  },
+  mounted() { }
+};
+</script>
+<style lang='scss' type='text/css' scoped>
+@import "../../style/enterpriseCredit/enterpriseCredit.scss";
+</style>

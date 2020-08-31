@@ -1,0 +1,46 @@
+import axios from 'axios';
+import { Toast } from "vant";
+// import qs from 'qs';
+const http = options => {
+  return new Promise((resolve, reject) => {
+    const defaultOptions = {};
+    const newOptions = {
+      ...defaultOptions,
+      ...options
+    };
+    // "application/json" 'content-Type': 'application/x-www-form-urlencoded',
+    newOptions.headers = {
+      'content-Type': 'application/json',
+      ...newOptions.headers
+    };
+    // if (options.method === 'post') {
+    //   options.data = qs.stringify(options.data);
+    // }
+    axios({
+      method: newOptions.method,
+      url: newOptions.url,
+      data: newOptions.data,
+      headers: newOptions.headers
+    }).then(res => {
+
+      //根据返回的状态码判断
+      if (res.status == 401) {
+        //操作返回登录页面
+        console.log("重新登陆");
+      } else if (res.status == 200) {
+        if (!res.data.successful) {
+          Toast(res.data.resultHint);
+          //alert(res.data.resultHint);
+        } else {
+          resolve(res.data);
+        }
+      } else {
+        reject(res);
+        //alert("网络错误",reject(res));
+      }
+    }).catch(err => {
+      reject(err);
+    })
+  })
+};
+export default http

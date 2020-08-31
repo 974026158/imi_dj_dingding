@@ -1,0 +1,31 @@
+{
+	"Print to console": {
+		"scope": "vue",
+		"prefix": "vue",
+		"body": [
+			"<template>",
+			"  <div class='app'>$0</div>",
+			"</template>",
+			"",
+			"<script>",
+			"export default {",
+			"  name: 'app',",
+			"components: {},",
+			"watch: {},",
+			"props: {},",
+			"  data() {",
+			"    return {};",
+			"  },",
+			"computed: {},",
+			"methods: {},",
+			"created(){},",
+			"mounted(){},",
+			"}",
+			"</script>",
+			"<style lang='scss' type='text/css' scoped>",
+			"",
+			"</style>"
+		],
+		"description": "create vue"
+	}
+}

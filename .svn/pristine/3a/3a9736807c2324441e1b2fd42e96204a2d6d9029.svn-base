@@ -1,0 +1,467 @@
+<template>
+  <div class="compulsoryDiv">
+    <!-- 必修选修头部 -->
+    <div class="compulsoryHeader">
+      <span><img src="../../assets/star.png" alt="" style="width:100%;height:100%" /></span>
+      <span v-show="this.type==='0'" class="moreContainer recommend">必修课</span>
+      <span v-show="this.type==='1'" class="moreContainer recommend">选修课</span>
+    </div>
+    <!-- 必修选修剩余部分 -->
+    <div class="complete">
+      <!-- tab切换 -->
+      <div class="tabDiv">
+        <span v-for="(item,index) in compulsoryList" @click="compulsoryTab(index)" :key="index" :class="{'active':compulsoryActive===index}">{{item.tab}}</span>
+      </div>
+      <!-- tab切换内容 -->
+      <!-- compulsoryViewStyle == 1 ? 按分类显示必修课 : compulsoryViewStyle == 2 ? 按课程显示必修课 : '' -->
+      <div class="tabData">
+        <!-- 未完成计划的div内容显示-->
+        <div v-if="compulsoryActive === 0" :style="{'display':viewStyle==2?'flex':'block','padding-left':'0rem','padding-right':'0rem','padding-top':viewStyle==2?'0.1rem':'0rem','padding-bottom':viewStyle==2?'0.1rem':'0rem'}">
+          <div :class="viewStyle==2?'compulsoryViewStyle':'containerStyle'" v-for="item in unfinishedCourseList" :key="type==='0'?item.courseId:item.catalogId" @click="toDetail(item)">
+            <!--  courseCount-->
+            <span class="specialContainer">
+              <p class="commonText">{{type==='0'?item.courseName:item.catalogName}}</p>
+              <p class="commonTextTeacher courseCount" v-if="type === '0'">讲师：{{item.courseTeacherName}}</p>
+              <p class="commonTextTeacher courseCount" v-else>课程数：{{item.courseCount}}</p>
+              <span>
+                <span class="progressBar">
+                  <span class="progressBarConduct" :style="{width:type==='0'?item.currentStudyTime / item.courseTotalTime * 100 + '%':item.catalogFinishiTime / item.catalogTotalTime * 100 + '%'}"></span>
+                </span>
+                <em class="progressBarSize">{{type==='0'?item.currentStudyTime / item.courseTotalTime * 100 + '%':(item.catalogFinishiTime / item.catalogTotalTime * 100).toFixed(0) + '%'}}</em>
+              </span>
+            </span>
+            <span class="commonImgStyle">
+              <img :src="type==='0'?coursePrefix + item.coursePathCover + suffix:catalogPrefix + item.catagory_img + suffix" alt style="width:100%;height:100%" />
+            </span>
+            <!-- </div> -->
+          </div>
+          <!-- 没有数据展示 -->
+          <div class="noData" v-if="unfinishedCourseList.length == 0">暂时没有数据</div>
+          <em v-show="showMoreUnfinished" class='showMore commonMore positionStyle' @click="toPlanList">更多</em>
+        </div>
+        <!-- 已完成计划的div内容显示-->
+        <div v-if="compulsoryActive === 1" :style="{'display':viewStyle==2?'flex':'block','padding-left':'0rem','padding-right':'0rem','padding-top':viewStyle==2?'0.1rem':'0rem','padding-bottom':viewStyle==2?'0.1rem':'0rem'}">
+          <div :class="viewStyle==2?'compulsoryViewStyle':'containerStyle'" v-for="item in finishedCourseList" :key="type==='0'?item.courseId:item.catalogId" @click="showVideo(item)">
+            <!-- <div> -->
+            <span class="specialContainer">
+              <p class="commonText">{{type==='0'?item.courseName:item.catalogName}}</p>
+              <p class="commonTextTeacher courseCount" v-if="type === '0'">讲师：{{item.courseTeacherName}}</p>
+              <p class="commonTextTeacher courseCount" v-else>课程数：{{item.courseCount}}</p>
+              <span>
+                <span class="finishedCourseBar">
+                  <span :style="{width:progressBar}" class="progressBarConduct"></span>
+                </span>
+                <em class="progressBarSize">{{progressBar}}</em>
+              </span>
+            </span>
+            <span class="commonImgStyle">
+              <img :src="type==='0'?coursePrefix + item.coursePathCover + suffix:catalogPrefix + item.catagory_img + suffix" alt style="width:100%;height:100%" />
+            </span>
+            <!-- </div> -->
+          </div>
+          <!-- 没有数据展示 -->
+          <div class="noData" v-if="finishedCourseList.length == 0">暂时没有数据</div>
+          <em v-show="showMoreFinished" class='showMore commonMore positionStyle' @click="toPlanList">更多</em>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import { finishedCourses, unFinishedCourses, catalogCourses } from "../../api/finishedCourses.js";
+export default {
+  name: "planCourse",
+  components: {},
+  props: {
+    type: String
+  },
+  watch: {
+
+  },
+  data() {
+    return {
+      compulsoryActive: 0,
+      compulsoryList: [{ tab: "未完成计划" }, { tab: "已完成计划" }],
+      unfinishedCourseList: [],
+      finishedCourseList: [],
+      progressBar: '100%',
+      coursePrefix: this.$title + this.$coursePrefix,
+      catalogPrefix: this.$title + this.$catalogPrefix,
+      suffix: '&TOKEN=' + this.$token,
+      showMoreUnfinished: false, //未完成更多
+      showMoreFinished: false, //完成更多
+      viewStyle: '' //判断是课程显示还是课程分类显示
+    };
+  },
+
+  methods: {
+    //   完成未完成 选项卡切换事件
+    compulsoryTab(index) {
+      this.compulsoryActive = index;
+      if (this.type === '0' && this.finishedCourseList.length === 0) {
+        finishedCourses(this.$title, this.$token).then(this.getFinishedCourses);
+      }
+    },
+    // 获取未完成课程
+    getUnfinishedCourses(res) {
+      //type 0==必修 1==选修    viewStyle == 1 ? 按分类显示必修课 : compulsoryViewStyle == 2 ? 按课程显示必修课 : ''
+      if (this.type === '0') {
+        if (this.viewStyle == '2') {//课程
+          if (res.resultValue.items.length > 2) {
+            this.unfinishedCourseList[0] = res.resultValue.items[0];
+            this.unfinishedCourseList[1] = res.resultValue.items[1];
+            this.showMoreUnfinished = true;
+          } else {
+            this.unfinishedCourseList = res.resultValue.items;
+          }
+        }
+        else if (this.viewStyle == '1') {//分类
+          if (res.resultValue.unfinishedList.length > 3) {
+            this.unfinishedCourseList[0] = res.resultValue.unfinishedList[0];
+            this.unfinishedCourseList[1] = res.resultValue.unfinishedList[1];
+            this.showMoreUnfinished = true;
+          } else {
+            this.unfinishedCourseList = res.resultValue.unfinishedList;
+          }
+        }
+      } else {
+        if (res.resultValue.unfinishedList.length > 3) {
+          this.unfinishedCourseList[0] = res.resultValue.unfinishedList[0];
+          this.unfinishedCourseList[1] = res.resultValue.unfinishedList[1];
+          this.showMoreUnfinished = true;
+        } else {
+          this.unfinishedCourseList = res.resultValue.unfinishedList;
+        }
+      }
+    },
+    // 获取已完成
+    getFinishedCourses(res) {
+
+      if (res.successful) {
+        if (this.type === '0') {
+          if (res.resultValue.items.length > 2) {
+            this.finishedCourseList[0] = res.resultValue.items[0];
+            this.finishedCourseList[1] = res.resultValue.items[1];
+            this.showMoreFinished = true;
+
+          } else {
+            this.finishedCourseList = res.resultValue.items;
+          }
+        } else {
+          if (res.resultValue.finishedList.length > 3) {
+            this.finishedCourseList[0] = res.resultValue.finishedList[0];
+            this.finishedCourseList[1] = res.resultValue.finishedList[1];
+            this.showMoreFinished = true;
+
+          } else {
+            this.finishedCourseList = res.resultValue.finishedList;
+            console.log(this.finishedCourseList)
+          }
+        }
+      }
+    },
+    // 分类跳转
+    toDetail(item) {
+      if (this.type === '0') {
+        localStorage.setItem("videoData", item.courseId);
+        this.$router.push({
+          path: "/courseLearning",
+          query: {
+            value: item,
+            courseName: item.courseName
+          }
+        });
+      } else {
+        this.$router.push({
+          path: "/catalogList",
+          query: {
+            catalogId: item.catalogId
+          }
+        });
+      }
+    },
+    // 课程跳更多
+    toPlanList() {
+      this.$router.push({
+        path: "/planCourseList",
+        query: {
+          type: this.type,
+          index: this.compulsoryActive, //0 ==未完成  1==已完成
+          viewStyle: this.viewStyle
+        }
+      });
+    },
+    // 已完成查看视频 courseId
+    showVideo(item) {
+      localStorage.setItem("videoData", item.courseId);
+      this.$router.push({
+        path: "/courseLearning",
+        query: {
+          value: item
+        }
+      });
+    },
+      getCompulsoryViewStyle(res) {
+          if (res.successful) {
+              this.viewStyle = res.resultValue.compulsoryViewStyle;
+              if (this.viewStyle == '2') {
+                  unFinishedCourses(this.$title, this.$token).then(this.getUnfinishedCourses);
+              } else if (this.viewStyle == '1') {
+                  this.type = '1';
+                  catalogCourses(this.$title, 1, this.$token).then(this.getUnfinishedCourses);
+              }
+          }
+      },
+  },
+  created() {
+    // type 0==必修 && 1==选修      viewStyle == 1按分类显示必修课 && 2 == 按课程显示必修课
+    if (this.type == '0') {
+        var _this = this;
+        _this.$http({
+            method: "get",
+            url: "http://wsdx.sgcc.com.cn/api/sysmanage/parameterSetting/getSetting?TOKEN=" + _this.$token
+        })
+            .then(this.getCompulsoryViewStyle)
+            .catch(function (err) {
+                console.log(err);
+            });
+    } else {
+      catalogCourses(this.$title, 2, this.$token).then(this.getUnfinishedCourses);
+    }
+  },
+  mounted() { }
+};
+</script>
+<style lang='scss' type='text/css' scoped>
+.defaultFlag {
+  height: 1.215rem;
+  background: #f8f8f8;
+  font-size: 14px;
+  text-align: center;
+  line-height: 1.215rem;
+}
+.compulsoryDiv {
+  width: 100%;
+  height: 1.95rem;
+  background: #fff;
+  border-top: 1px solid #f2f2f2;
+  border-bottom: 1px solid #f2f2f2;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.09rem;
+  .compulsoryHeader {
+    height: 0.5rem;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    padding-left: 0.15rem;
+    span:nth-child(1) {
+      display: block;
+      width: 0.2rem;
+      margin-right: 0.08rem;
+    }
+    span:nth-child(2) {
+      font-size: 15px;
+      color: #7f7f7f;
+      line-height: 0.05rem;
+    }
+  }
+  // 完成未完成选项卡div
+  .complete {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    // 选项卡
+    .tabDiv {
+      height: 0.35rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-bottom: 1px solid #e7e7e7;
+      span {
+        width: 50%;
+        height: 100%;
+        display: block;
+        text-align: center;
+        line-height: 0.35rem;
+        color: #b8b8b8;
+        font-size: 15px;
+      }
+      // span:nth-child(1){
+      //   border-bottom: 2px solid #e7e7e7;
+      // }
+      // span:nth-child(2){
+      //   border-bottom: 2px solid #e7e7e7;
+      // }
+      // 选中样式
+      .active {
+        color: #c33c3d;
+        border-bottom: 2px solid #c33c3d;
+        // border-bottom-color: #c33c3d !important;
+        transition: 0.2s;
+        width: 50%;
+      }
+    }
+    // 选项卡数据
+    .tabData {
+      flex: 1;
+      div {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        // width: 100%;
+        height: 100%;
+        padding: 0.15rem;
+      }
+      // 未完成计划的div内容显示
+      div:nth-child(1) {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      div:nth-child(1) span {
+        display: block;
+      }
+      div:nth-child(1) span:nth-child(1) {
+        width: 65%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        // padding-top: 0.08rem;
+        // padding-bottom: 0.05rem;
+        p {
+          font-size: 15px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          font-weight: bold;
+        }
+        span {
+          border: none;
+          width: auto;
+          height: auto;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          span {
+            height: 0.05rem;
+            width: 1.05rem;
+            background: #eaeaea;
+            border-radius: 0 20px 20px 0;
+            position: relative;
+            span {
+              position: absolute;
+              height: 100%;
+              border-radius: 0 20px 20px 0;
+              background: #ee2400;
+              top: 0;
+              left: 0;
+            }
+          }
+          em {
+            font-size: 12px;
+            color: #ee2400;
+            padding-right: 0.5rem;
+          }
+        }
+      }
+      div:nth-child(1) span:nth-child(2) {
+        display: block;
+        width: 1.17rem;
+        height: 0.63rem;
+        border: 1px solid #ccc;
+      }
+    }
+  }
+}
+.compulsoryDiv {
+  height: auto !important;
+  position: relative;
+  /*// 展示第一条数据div*/
+  .containerStyle {
+    height: 1rem !important;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    /*// 更多*/
+    .showMore {
+      font-size: 15px;
+      width: 84%;
+      text-align: right;
+      color: #666;
+    }
+  }
+  /*// 选秀必修*/
+  .moreContainer {
+    font-size: 15px;
+    color: #7f7f7f;
+    line-height: 0.05rem;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding-right: 0.15rem;
+  }
+  /*// 没有数据时展示*/
+  .noData {
+    width: 100%;
+    height: 1.2rem !important;
+    text-align: center;
+    font-size: 15px;
+    display: inline-block !important;
+    line-height: 1rem;
+  }
+  /*// 给中间的数据div添加上下边框*/
+  .tabData div:nth-child(2) {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-left: 0.15rem;
+    margin-right: 0.15rem;
+    border-top: 1px solid #e7e7e7;
+    border-bottom: 1px solid #e7e7e7;
+    // width: 91.7% !important;
+  }
+}
+/*// 如果是课程 compulsoryViewStyle==2*/
+.compulsoryViewStyle {
+  flex-direction: column-reverse !important;
+  height: auto !important;
+  position: relative;
+  width: 50% !important;
+  padding: 0rem !important;
+  margin-left: 0rem !important;
+  margin-right: 0rem !important;
+  border-top: none !important;
+  border-bottom: none !important;
+  .commonImgStyle {
+    width: 86% !important;
+    height: 1rem !important;
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+  .specialContainer {
+    width: 86% !important;
+    .commonText {
+      margin-top: 0.05rem;
+      font-weight: normal !important;
+    }
+    .progressBarSize {
+      padding-right: 0rem !important;
+    }
+    .commonTextTeacher {
+      margin-bottom: 0.05rem;
+      margin-top: 0.05rem;
+    }
+  }
+}
+/*// 更多*/
+.positionStyle {
+  position: absolute;
+  top: 0.16rem;
+  right: 0.16rem;
+}
+</style>

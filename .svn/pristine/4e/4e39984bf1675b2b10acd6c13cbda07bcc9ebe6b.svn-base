@@ -1,0 +1,54 @@
+import http from "../utils/http.js";
+// // 学习心得
+export async function experience(req, reqToken, reqPageSize, reqPageNumber, reqPhone) {
+    const res = await http({
+        method: 'get',
+        url: req + "/course/userHarvest/getHarvests?filter=&TOKEN=" + reqToken + "&pageSize=" + reqPageSize + "&pageNumber=" + reqPageNumber + "&_=" + reqPhone
+    })
+    return res;
+}
+// 编辑心得
+export async function editExperience(reqHttp, reqToken, req) {
+    const res = await http({
+        method: 'post',
+        url: '/api' + reqHttp + "/course/userHarvest/update?TOKEN=" + reqToken,
+        data: req
+    })
+    return res;
+}
+//删除心得
+export async function deleteExperience(reqHttp, reqId, reqToken, req) {
+    const res = await http({
+        method: 'post',
+        url: reqHttp + "/course/userHarvest/delete/" + reqId + "?TOKEN=" + reqToken,
+        data: req
+    })
+    return res;
+}
+// // 分享心得
+export async function shareExperience(reqHttp, reqId, reqToken, req) {
+    const res = await http({
+        method: 'post',
+        url: '/api' + reqHttp + "/course/userHarvest/share/" + reqId + "?TOKEN=" + reqToken,
+        data: req
+    })
+    return res;
+}
+// 取消分享
+export async function cancelShareExperience(reqHttp, reqId, reqToken, req) {
+    const res = await http({
+        method: 'post',
+        url: '/api' + reqHttp + "/course/userHarvest/cancelshare/" + reqId + "?TOKEN=" + reqToken,
+        data: req
+    })
+    return res;
+}
+// // 创建心得 	"items": [{"courseId": ["2c9388166bad7697016bbb8047be0007"], "harvestTitle": "123", "harvestContent": "很好1"}]
+export async function addExperience(reqHttp, reqToken, req) {
+    const res = await http({
+        method: 'post',
+        url: '/api' + reqHttp + "/course/userHarvest/save?TOKEN=" + reqToken,
+        data: req
+    })
+    return res;
+}

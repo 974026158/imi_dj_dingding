@@ -1,0 +1,45 @@
+import http from "../utils/http.js";
+// 学习笔记
+export async function notes(req, reqToken, reqPageSize, reqPageNumber, reqPhone) {
+    const res = await http({
+        method: 'get',
+        url: req + "/course/courseNote/getNotes?filter=&TOKEN=" + reqToken + "&pageSize=" + reqPageSize + "&pageNumber=" + reqPageNumber + "&_=" + reqPhone
+    })
+    return res;
+}
+// // 修改笔记 items: [{noteId: "2c938841710341980171401d12020002", noteContent: "课程很有意思"}]
+export async function editNotes(reqHttp, reqToken, req) {
+    const res = await http({
+        method: 'post',
+        url: '/api' + reqHttp + "/course/courseNote/update?TOKEN=" + reqToken,
+        data: req
+    })
+    return res;
+}
+// 删除笔记
+export async function deleteNotes(reqHttp, reqId, reqToken,req) {
+    const res = await http({
+        method: 'post',
+        url: reqHttp + "/course/courseNote/delete/" + reqId + "?TOKEN=" + reqToken,
+        data: req
+    })
+    return res;
+}
+// // 分享笔记
+export async function shareNotes(reqHttp, reqId, reqToken,req) {
+    const res = await http({
+        method: 'post',
+        url: reqHttp + "/course/courseNote/share/" + reqId + "?TOKEN=" + reqToken,
+        data: req
+    })
+    return res;
+}
+// // 取消分享
+export async function cancelshareNotes(reqHttp, reqId, reqToken,req) {
+    const res = await http({
+        method: 'post',
+        url: reqHttp + "/course/courseNote/cancelshare/" + reqId + "?TOKEN=" + reqToken,
+        data: req
+    })
+    return res;
+}

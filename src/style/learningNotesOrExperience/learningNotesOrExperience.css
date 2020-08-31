@@ -1,0 +1,105 @@
+.learningNotes .learningData {
+  width: 100%;
+  height: 1.585rem;
+  border-bottom: 1px solid #ccc;
+  padding-top: 0.1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.learningNotes .learningData span {
+  display: block;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  font-size: 30px;
+}
+
+.learningNotes .learningData span:nth-child(1) {
+  justify-content: flex-end;
+  padding-right: 0.17rem;
+}
+
+.learningNotes .learningData span:nth-child(2) {
+  padding-left: 0.13rem;
+  padding-right: 0.13rem;
+  color: #3a3a3a;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  min-height: 0.4rem;
+  align-items: center;
+}
+
+.learningNotes .learningData span:nth-child(3) {
+  justify-content: center;
+}
+
+.learningNotes .learningData span:nth-child(3) em {
+  font-size: 13px;
+  border: 1px solid #ebebeb;
+  border-radius: 10px;
+  padding-left: 0.05rem;
+  padding-right: 0.05rem;
+  color: #3a3a3a;
+}
+
+.learningNotes .learningData span:nth-child(4) {
+  font-size: 14px;
+  justify-content: flex-end;
+  color: #3a3a3a;
+  padding-right: 0.17rem;
+}
+
+.learningNotes .noMore {
+  width: 100%;
+  height: 0.385rem;
+  line-height: 0.385rem;
+  text-align: center;
+  color: #777;
+  font-size: 15px;
+  font-weight: 500;
+  background: #fff;
+}
+
+.learningNotes /deep/.van-overlay {
+  background-color: transparent;
+}
+
+.learningNotes /deep/.van-popup {
+  border-radius: 0.15rem 0.15rem 0 0;
+  background: #999;
+}
+
+.learningNotes /deep/.van-popup .operation {
+  width: 100%;
+  height: 0.8rem;
+  border-radius: 0 0 0.15rem 0.15rem;
+  margin-top: 0.6rem;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding-left: 0.11rem;
+  padding-right: 0.11rem;
+}
+
+.learningNotes /deep/.van-popup .operation span {
+  display: flex;
+  width: 0.65rem;
+  height: 0.65rem;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 0.05rem;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+}
+
+.learningNotes /deep/.van-popup .operation span .iconStyle {
+  margin-right: 0.05rem;
+}
+
+.learningNotes /deep/.van-popup__close-icon {
+  color: #fff;
+}

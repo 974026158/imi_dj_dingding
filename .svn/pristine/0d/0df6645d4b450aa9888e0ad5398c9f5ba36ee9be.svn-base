@@ -1,0 +1,122 @@
+<template>
+  <div class="compulsoryDiv">
+    <!-- 微课头部 -->
+    <div class="compulsoryHeader">
+      <span></span>
+      <span>微课</span>
+      <span class="commonMore" style="font-size: 15px;color: #7f7f7f;width: 84%;text-align: right;" v-if="this.defaultList.length>=4" @click="more()">更多</span>
+    </div>
+    <div v-show="defaultFlag" class="defaultFlag">
+      <van-loading size="24px" color="#1989fa">数据加载中...</van-loading>
+    </div>
+    <!-- 微课展示区域 -->
+    <div class="complete" v-for="(item,index) in defaultList" :key="index" @click="showVideo(item)">
+      <div class="tabData">
+        <div style="border-top: 1px solid #ccc;margin-left:0.15rem;width:auto;padding-left:0">
+          <span>
+            <p class="commonText">{{item.courseName}}</p>
+          </span>
+          <span class="commonImgStyle">
+            <img :src="electiveImg+item.courseCoverPath+micCoursesToken" alt style="width:100%;height:100%" />
+          </span>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="more">更多</div> -->
+  </div>
+</template>
+
+<script>
+import { micCourses } from "../../../api/enterpriseCredit.js";
+export default {
+  name: "elective",
+  components: {},
+  watch: {
+    defaultList: function () {
+      this.$nextTick(function () {
+        this.defaultFlag = false;
+      });
+    }
+  },
+  props: {},
+  data() {
+    return {
+      electiveValue: "", //内容
+      //   图片拼接
+      electiveImg: this.$title + this.$coursePrefix,
+      micCoursesToken: "&TOKEN=" + this.$token,
+      micCoursesList: [],
+      defaultList: [],
+      defaultFlag: true
+    };
+  },
+  computed: {},
+  methods: {
+    //   获取微课信息
+    getmicCourses() {
+      micCourses(this.$title, this.$token).then(res => {
+        localStorage.setItem("MicrolectureData", JSON.stringify(res.resultValue))
+        //   默认显示
+        var newArr = [];
+        newArr.push(
+          res.resultValue[0],
+          res.resultValue[1],
+          res.resultValue[2],
+          res.resultValue[3]
+        );
+        // this.micCoursesList = res.resultValue;
+        this.defaultList = newArr;
+      });
+    },
+    // 跳转查看视频 microLecture
+    showVideo(item) {
+      localStorage.setItem("videoData", item.courseId);
+      this.$router.push({
+        path: "/courseLearning",
+        query: {
+          value: item
+        }
+      });
+    },
+    // 点击更多
+    more() {
+      this.$router.push({
+        path: "/microLecture"
+      });
+    }
+  },
+  created() {
+    this.getmicCourses();
+  },
+  mounted() { }
+};
+</script>
+<style lang='scss' type='text/css' scoped>
+@import "../../../style/enterpriseCredit/enterpriseCredit.scss";
+// 重置微课高度
+.compulsoryDiv {
+  height: auto !important;
+  margin-bottom: 0rem !important;
+}
+.complete {
+  flex: none !important;
+  height: 0.94rem !important;
+  background: #fff;
+}
+.more {
+  width: 100%;
+  height: 0.3rem;
+  font-size: 14px;
+  color: #666;
+  text-align: center;
+  line-height: 0.3rem;
+  background: #e7e7e7;
+}
+.defaultFlag {
+  height: 1.215rem;
+  background: #f8f8f8;
+  font-size: 14px;
+  text-align: center;
+  line-height: 1.215rem;
+}
+</style>

@@ -1,0 +1,41 @@
+import http from "../utils/http.js";
+// // 总课时
+export async function classHourTotal(req, reqToken) {
+    const res = await http({
+        method: 'get',
+        url: req + "/statement/course/getAnnualAssessmentTime?TOKEN=" + reqToken
+    })
+    return res;
+}
+// // 已修课时
+export async function classHouralready(reqHttp, reqTime, reqToken) {
+    const res = await http({
+        method: 'get',
+        url: reqHttp + "/statement/course/getEarnedPeriod/" + reqTime + "?TOKEN=" + reqToken
+    })
+    return res;
+}
+// // 必修课时
+export async function classHourcompulsory(reqHttp, reqToken) {
+    const res = await http({
+        method: 'get',
+        url: reqHttp + "/resourcemanage/course/getCourseTotalTime?TOKEN=" + reqToken
+    })
+    return res;
+}
+// // 选修课时
+export async function classHourelective(reqHttp, reqKey, reqToken) {
+    const res = await http({
+        method: 'get',
+        url: reqHttp + "/resourcemanage/course/getFinishedTimeAndTotalTime/" + reqKey + "?TOKEN=" + reqToken
+    })
+    return res;
+}
+// 微课 http://wsdx.sgcc.com.cn/api/resourcemanage/course/getMicCourses?TOKEN=a46116c2-a5f2-434d-b67b-1bb272b4da8d
+export async function micCourses(reqHttp, reqToken) {
+    const res = await http({
+        method: 'get',
+        url: reqHttp + "/resourcemanage/course/getMicCourses?TOKEN=" + reqToken
+    })
+    return res;
+}
